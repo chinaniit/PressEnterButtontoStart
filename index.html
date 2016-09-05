@@ -1,0 +1,68 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div id="app">
+        <div style="font-size: 50px">{{ currentUser }}</div>
+        <button v-on:click="start" style="display: none">Start</button>
+        <button v-on:click="end" style="display: none">End</button>
+    </div>
+    <script src="http://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+    <script>
+        var v = new Vue({
+            el: document.body,
+            data: {
+                currentUser: "Press 'Enter' Button to Start.",
+                users: [
+                    "ZhiDa",
+                    "gray",
+                    "yunlong",
+                    "jianluo",
+                    "peach",
+                    "robot",
+                    "Zhun",
+                    "Zuo",
+                    "Hao",
+                    "jason",
+                    "Speed",
+                    "Ken",
+                    "Undefined"
+                ]
+            },
+            methods:{
+                start: function(){
+                    let self = this;
+                    let index = 0;
+                    window.intervalId = setInterval(function(){
+                        if(index >= self._data.users.length){
+                            index = 0;
+                        }
+                        self.currentUser = self._data.users[index];
+                        index++;
+                    }, 1000);
+                },
+                end: function(){
+                    clearInterval(window.intervalId);
+                    window.intervalId = null;
+                }
+            },
+            created: function(){
+                console.log(0);
+                let self = this;        
+                window.document.onkeyup = function(e){
+                    console.log(e.keyCode);
+                    if(e.keyCode == 13/*enter*/){
+                        if(window.intervalId){
+                            self.end();
+                        }else{
+                            self.start();
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
