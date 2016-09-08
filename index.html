@@ -5,7 +5,7 @@
 </head>
 <body>
     <div id="app">
-        <div style="font-size: 50px">{{ currentUser }}</div>
+        <div style="font-size: 30px">{{ currentUser }}</div>
         <button v-on:click="start" style="display: none">Start</button>
         <button v-on:click="end" style="display: none">End</button>
     </div>
@@ -16,16 +16,16 @@
             data: {
                 currentUser: "Press 'Enter' Button to Start.",
                 users: [
-                    "ZhiDa",
+                    //"ZhiDa",
                     "gray",
-                    "yunlong",
+                    //"yunlong",
                     "jianluo",
                     "peach",
                     "robot",
                     "Zhun",
                     "Zuo",
                     "Hao",
-                    "jason",
+                    //"jason",
                     "Speed",
                     "Ken",
                     "Undefined"
@@ -41,7 +41,7 @@
                         }
                         self.currentUser = self._data.users[index];
                         index++;
-                    }, 500);
+                    }, 30);
                 },
                 end: function(){
                     clearInterval(window.intervalId);
