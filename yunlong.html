@@ -1,0 +1,73 @@
+﻿<html>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    var t;
+    var person = [{ 'name': 'ZhiDa' }, { 'name': 'gray' }, { 'name': 'yunlong' }, { 'name': 'jianluo' }, { 'name': 'peach' }, { 'name': 'robot' }, { 'name': 'Zhun' }, { 'name': 'Zuo' }, { 'name': 'Hao' }, { 'name': 'jason' }, { 'name': 'Wei' }, { 'name': 'Ken' }];
+    var personNum = person.length;
+
+
+    function stopCount() {
+        clearTimeout(t);
+        $('#num').attr('disabled', false);
+    }
+
+    function choosePerson() {
+        var dayNum = $('#num').val();
+        var needNum = 2;
+        $('#num').attr('disabled', 'disabled');
+        $('.cj tr:gt(0)').remove();
+        var htmlTable = '';
+
+        for (k = 0; k < dayNum; k++) {
+            var sshtml = ""
+            var showNum = [];
+            for (var i = 0; ; i++) {
+                var currNum = parseInt(Math.random() * personNum);
+                $.inArray(currNum, showNum) == -1 ? showNum.push(currNum) : '';
+                if (showNum.length == needNum) {
+                    break;
+                }
+            }
+            var aa = new Date().getMilliseconds() % 11;
+            for (var j = 0; j < needNum; j++) {
+                sshtml += '<td>' + person[showNum[j]].name + '</td>';
+            }
+            htmlTable += '<tr><td>星期' + (k + 1) + '</td>' + sshtml + '</tr>';
+        }
+        $('.cj').append(htmlTable);
+        return t = setTimeout("choosePerson()", 1);
+    }
+</script>
+<style type="text/css">
+    tr {
+        height: 50px;
+    }
+
+    td {
+        border: 1px solid red;
+        text-align: center;
+        width: 33.3%;
+    }
+</style>
+<body style="margin:0 auto">
+    <div style="width: 400px; height: 100px;text-align: center;margin: 0 auto;margin-top: 200px;">
+        <div style="float: left;height: 40px;width: 200px;" id="aa">需抽取天数：<select id="num"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div style="float: left;height: 40px;width: 200px;">
+            <button style="display: block;float: left; margin-right:15px;" id="start" onClick="choosePerson()">开始</button>
+            <button style="display: block;float: left;" id="end" onClick="stopCount()">结束</button>
+        </div>
+    </div>
+    <table class="cj" width="400" style="margin:50px auto;border-collapse:collapse;border:1px solid red">
+        <tr>
+            <td>星期</td>
+            <td>检查</td>
+            <td>修改</td>
+        </tr>
+        <tr>
+            <td>星期几</td>
+            <td>检查人</td>
+            <td>修改人</td>
+        </tr>
+    </table>
+</body>
+</html>
