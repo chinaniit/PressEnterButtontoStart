@@ -1,0 +1,112 @@
+<html>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    var t;
+    var persons = [{ 'name': 'ZhiDa' }, { 'name': 'gray' }, { 'name': 'yunlong' }, { 'name': 'jianluo' }, { 'name': 'peach' }, { 'name': 'robot' }, { 'name': 'Zhun' }, { 'name': 'Zuo' }, { 'name': 'Hao' }, { 'name': 'jason' }, { 'name': 'Speed' }, { 'name': 'Ken' }];
+    var flag = 0;
+
+
+    function stopCount() {
+        flag = 0;
+        clearTimeout(t);
+        $('#num').attr('disabled', false);
+        $('#start', '#end').attr("disabled", true);
+    }
+
+    function choosePerson() {
+        flag = 1;
+        var dayNum = $('#num').val();
+        var needNum = 2;
+        $('#num').attr('disabled', 'disabled');
+        $('.cj tr:gt(0)').remove();
+        var htmlTable = '';
+
+		var winners = [];		
+		var allNum = dayNum*needNum;
+		if(allNum<=persons.length){
+			while(winners.length<allNum){
+				var currNum = parseInt(Math.random() * persons.length);
+				var person = persons[currNum];
+				$.inArray(person, winners)==-1 && winners.push(person);
+			}
+		}else{
+			while(winners.length<persons.length){
+				var currNum = parseInt(Math.random() * persons.length);
+				var person = persons[currNum];
+				$.inArray(person, winners)==-1 && winners.push(person);
+			}
+			
+			var redundant=[];
+			for(var i=0;i<allNum-persons.length;i++){
+				var currNum = parseInt(Math.random() * persons.length);
+				var person = persons[currNum];
+				$.inArray(person, redundant)==-1 && redundant.push(person);
+			}
+			
+			persons = persons.contact(redundant);
+		}
+		
+		for(var j=0; j<winners.length;j++){
+			var winner=winners[j];
+			switch(j%needNum){
+				case 0:
+					htmlTable += '<tr><td>星期' + (j/needNum + 1) + '</td><td>' + winner.name + '</td>';
+					break;
+				case needNum-1:
+					htmlTable += '<td>' + winner.name + '</td></tr>';
+					break;
+				default:
+					htmlTable += '<td>' + winner.name + '</td>';
+					break;
+			}			
+		}
+		
+        $('.cj').append(htmlTable);
+        return t = setTimeout("choosePerson()", 1);
+    }
+
+    window.document.onkeyup = function (e) {
+        console.log(e.keyCode);
+        if (e.keyCode == 13/*enter*/) {
+            if (flag ==1) {
+                stopCount();
+            } else {
+               choosePerson();
+            }
+        }
+    }
+
+</script>
+<style type="text/css">
+    tr {
+        height: 50px;
+    }
+
+    td {
+        border: 1px solid red;
+        text-align: center;
+        width: 33.3%;
+    }
+</style>
+<body style="margin:0 auto">
+    <div style="width: 400px; height: 100px;text-align: center;margin: 0 auto;margin-top: 200px;">
+        <div style="float: left;height: 40px;width: 200px;" id="aa">需抽取天数：<select id="num"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected = "selected">5</option></select></div>
+        <div style="float: left;height: 40px;width: 200px;">
+            <button style="display: block;float: left; margin-right:15px;" id="start" onClick="choosePerson()">开始</button>
+            <button style="display: block;float: left;" id="end" onClick="stopCount()">结束</button>
+        </div>
+    </div>
+    <table class="cj" width="400" style="margin:50px auto;border-collapse:collapse;border:1px solid red">
+        <tr>
+            <td>星期</td>
+            <td>检查</td>
+            <td>修改</td>
+        </tr>
+        <tr>
+            <td>星期几</td>
+            <td>检查人</td>
+            <td>修改人</td>
+        </tr>
+    </table>
+</body>
+</html>
