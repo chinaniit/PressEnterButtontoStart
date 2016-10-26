@@ -1,0 +1,139 @@
+
+<script language="javascript">
+var timer;
+var randnum;
+var flag = 0;
+var cellnum =1;
+var personName = new Array();
+
+personName[0] = "ZhiDa";
+personName[1] = "gray";
+personName[2] = "yunlong";
+personName[3] = "jianluo";
+personName[4] = "peach";
+personName[5] = "robot";
+personName[6] = "Zhun";
+personName[7] = "Zuo";
+personName[8] = "Hao";
+personName[9] = "jason";
+personName[10] = "Speed";
+personName[11] = "Ken";
+personName[12] = "junzhuo";
+
+var num = personName.length - 1;
+
+function getRandNum() {
+    num = parseInt(num);
+    var y = GetRnd(0, num);
+    document.getElementById("result").value = personName[y];
+}
+
+function start() {
+    clearInterval(timer);
+    timer = setInterval('change()', 50);
+}
+
+function ok() {
+    clearInterval(timer);
+}
+
+function GetRnd(m, n) {
+    randnum = parseInt(Math.random() * (n - m + 1));
+    return randnum;
+}
+
+function setTimer() {
+    flag = 1;
+    time = setInterval("getRandNum()", 10);
+    document.getElementById("start").disabled = true;
+    document.getElementById("end").disabled = false;
+}
+
+function clearTimer() {
+    flag = 0;
+    noDupNum();
+    clearInterval(time);
+    document.getElementById("start").disabled = false;
+    document.getElementById("end").disabled = true;
+    setValues();
+}
+
+function noDupNum() {
+    personName.removeEleAt(randnum);
+    var o = 0;
+    for (p = 0; p < personName.length; p++) {
+        if (typeof personName[p] != "undefined") {
+            personName[o] = personName[p];
+            o++;
+        }
+    }
+    num = personName.length - 1;
+}
+
+Array.prototype.removeEleAt = function (dx) {
+    if (isNaN(dx) || dx > this.length) { return false; }
+    this.splice(dx, 1);
+}
+
+function setValues() {
+    document.getElementById(cellnum).value = document.getElementById("result").value;
+    cellnum++;
+}
+
+window.document.onkeyup = function (e) {
+    console.log(e.keyCode);
+    if (e.keyCode == 13/*enter*/) {
+        if (flag == 1) {
+            clearTimer();
+        } else {
+            setTimer();
+        }
+    }
+}
+</script>
+
+<title>Code Review 抽奖逗比版</title>
+<html>
+<body>
+    <div id="main">
+        <div align="center">
+            <h1>中奖人物</h1>
+            <p>
+                <input id="result" type="text" size="30"
+                       style="height:130px;width:800px;border:2px solid red;font-size:80px;" readonly />
+            </p>
+            <p>
+                <input id="start" type="button" value="开始" style="border:1px solid;border-color:#aaa #000 #000 #aaa;height:3em;width:10em;background:#fc0;cursor:pointer" onclick="setTimer()" />
+                <input id="end" type="button" value="停止" style="border:1px solid;border-color:#aaa #000 #000 #aaa;height:3em;width:10em;cursor:pointer" onclick="clearTimer()" disabled />
+            </p>
+            <p style="color:orangered"><strong>中奖情况</strong></p>
+            <table width="946" height="79" border="1">
+                <thead>
+                    <th></th>
+                    <th>星期一</th>
+                    <th>星期二</th>
+                    <th>星期三</th>
+                    <th>星期四</th>
+                    <th>星期五</th>
+                </thead>
+                <tr>
+                    <td style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="28">检查人</td>
+                    <td><input name="text1" type="text" id="1" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="28" readonly /></td>
+                    <td><input name="text2" type="text" id="3" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text3" type="text" id="5" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text4" type="text" id="7" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text5" type="text" id="9" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                </tr>
+                <tr>
+                    <td style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="28">修改人</td>
+                    <td><input name="text6" type="text" id="2" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="28" readonly /></td>
+                    <td><input name="text7" type="text" id="4" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text8" type="text" id="6" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text9" type="text" id="8" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                    <td><input name="text10" type="text" id="10" style="height:30px;width:190px;border:1px solid red;font-size:25px;" size="20" readonly /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
