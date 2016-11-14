@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Site.css" rel="stylesheet" />
+    <script src="Scripts/knockout-3.4.0.js"></script>
+    <script src="Scripts/ts/codeReview.js"></script>
+</head>
+<body onload="codeReview.RemainTime()">
+    <div class="text-center">
+        <span data-bind="text:user()" style="font-size:50px"></span>
+    </div>
+    <div style="padding:100px">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Weeks</th>
+                    <th>CodeReview</th>
+                    <th>UpdateCode</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach:lotterUsers">
+                <tr>
+                    <td><span data-bind="text:week"></span></td>
+                    <td><span data-bind="text:codeReviewUser()"></span></td>
+                    <td><span data-bind="text:updateCodeUser()"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <input type="button" value="点击抽奖" data-bind="click: Lotter()" />
+    </div>
+</body>
+</html>
+<script>
+    var codeReview = new StarLightInternal.CodeReview();
+    codeReview.EnterLotter();
+</script>
