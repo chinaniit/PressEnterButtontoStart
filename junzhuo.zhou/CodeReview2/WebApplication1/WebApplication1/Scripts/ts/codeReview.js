@@ -8,20 +8,20 @@ var StarLightInternal;
             this.user = ko.observable();
             this.lotterUsers = ko.observableArray();
             this.randomNum = ko.observable();
+            this.doc = ko.observable("");
+            this.hrefBody = ko.observable();
+            this.isSendEmail = ko.observable(false);
+            this.emailAddress = ko.observableArray();
             ko.applyBindings(this);
-            this.userList.push("ZhiDa");
-            this.userList.push("gray");
-            this.userList.push("yunlong");
-            this.userList.push("jianluo");
-            this.userList.push("peach");
-            this.userList.push("robot");
-            this.userList.push("Zhun");
-            this.userList.push("Zuo");
-            this.userList.push("Hao");
-            this.userList.push("jason");
-            this.userList.push("Speed");
-            this.userList.push("Ken");
-            this.userList.push("junzhuo");
+            var self = this;
+            $.get("/Users.json", function (data) {
+                $.each(data, function (index, item) {
+                    var email = item["email"];
+                    var name = email.split("@test.com");
+                    self.userList.push(name[0]);
+                    self.emailAddress().push(email);
+                });
+            });
             this.lotterUsers.push(new LotterUserViewModel("星期一"));
             this.lotterUsers.push(new LotterUserViewModel("星期二"));
             this.lotterUsers.push(new LotterUserViewModel("星期三"));
@@ -38,12 +38,16 @@ var StarLightInternal;
                 var updateCodeUser = lotterUser.updateCodeUser;
                 if (codeReviewUser() == null || codeReviewUser() == "") {
                     codeReviewUser(this.user());
+                    self.doc(self.doc() + lotterUser.week + " code review : " + this.user());
                     return;
                 }
                 if (updateCodeUser() == null || updateCodeUser() == "") {
                     updateCodeUser(this.user());
+                    self.doc(self.doc() + "," + " update Code : " + this.user() + "</br>");
                     if (i == lottersLength - 1) {
                         clearInterval(self.time);
+                        self.isSendEmail(true);
+                        this.hrefBody("mailto:" + self.emailAddress() + "?Subject=code_review&Body=" + this.doc());
                         self.user("抽奖结束");
                     }
                     return;
@@ -80,6 +84,7 @@ var StarLightInternal;
     var LotterUserViewModel = (function () {
         function LotterUserViewModel(_week) {
             this.codeReviewUser = ko.observable();
+            this.emailAddress = ko.observable();
             this.updateCodeUser = ko.observable();
             this.week = _week;
         }

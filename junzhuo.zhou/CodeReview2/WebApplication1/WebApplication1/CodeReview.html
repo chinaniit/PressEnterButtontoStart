@@ -15,7 +15,7 @@
     <div class="text-center">
         <span data-bind="text:user()" style="font-size:50px"></span>
     </div>
-    <div style="padding:100px">
+    <div style="padding:100px" id="html">
         <table class="table">
             <thead>
                 <tr>
@@ -34,10 +34,16 @@
         </table>
     </div>
     <div class="text-center">
+        <!--ko ifnot:isSendEmail()-->
         <input type="button" value="点击抽奖" data-bind="click: Lotter()" />
+        <!--/ko-->
+        <!--ko if:isSendEmail()-->
+        <a data-bind="attr: { href: hrefBody() }">给我发邮件</a>
+        <!--/ko-->
     </div>
 </body>
 </html>
+
 <script>
     var codeReview = new StarLightInternal.CodeReview();
     codeReview.EnterLotter();
