@@ -8,6 +8,9 @@ var StarLightInternal;
             this.user = ko.observable();
             this.lotterUsers = ko.observableArray();
             this.randomNum = ko.observable();
+            this.doc = ko.observable("");
+            this.body = ko.observable();
+            this.isSendEmail = ko.observable(false);
             ko.applyBindings(this);
             this.userList.push("ZhiDa");
             this.userList.push("gray");
@@ -19,7 +22,6 @@ var StarLightInternal;
             this.userList.push("Zuo");
             this.userList.push("Hao");
             this.userList.push("jason");
-            this.userList.push("Speed");
             this.userList.push("Ken");
             this.userList.push("junzhuo");
             this.lotterUsers.push(new LotterUserViewModel("星期一"));
@@ -38,12 +40,17 @@ var StarLightInternal;
                 var updateCodeUser = lotterUser.updateCodeUser;
                 if (codeReviewUser() == null || codeReviewUser() == "") {
                     codeReviewUser(this.user());
+                    self.doc(self.doc() + lotterUser.week + " code review : " + this.user());
                     return;
                 }
                 if (updateCodeUser() == null || updateCodeUser() == "") {
                     updateCodeUser(this.user());
+                    self.doc(self.doc() + "," + " update Code : " + this.user() + "</br>");
                     if (i == lottersLength - 1) {
                         clearInterval(self.time);
+                        self.isSendEmail(true);
+                        var emailAddress = "gray.wen@starlight-sms.com , yunlong.lan@starlight-sms.com , jianluo.tian@starlight-sms.com , peach.tang@starlight-sms.com , robot.luo@starlight-sms.com , zhun.li@starlight-sms.com , zuo.li@starlight-sms.com , hao.li@starlight-sms.com , jason.wang@starlight-sms.com , ken.xu@starlight-sms.com , junzhuo.zhou@starlight-sms.com";
+                        this.body("mailto:" + emailAddress + "?Subject=code_review&Body=" + this.doc());
                         self.user("抽奖结束");
                     }
                     return;
@@ -80,6 +87,7 @@ var StarLightInternal;
     var LotterUserViewModel = (function () {
         function LotterUserViewModel(_week) {
             this.codeReviewUser = ko.observable();
+            this.emailAddress = ko.observable();
             this.updateCodeUser = ko.observable();
             this.week = _week;
         }
@@ -87,3 +95,4 @@ var StarLightInternal;
     }());
     StarLightInternal.LotterUserViewModel = LotterUserViewModel;
 })(StarLightInternal || (StarLightInternal = {}));
+//# sourceMappingURL=codeReview.js.map

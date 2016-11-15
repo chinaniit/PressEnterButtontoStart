@@ -1,11 +1,15 @@
 ﻿/// <reference path="../jquery/jquery.d.ts" />
 /// <reference path="../knockout/knockout.d.ts" />
+
 module StarLightInternal {
     export class CodeReview {
         public userList = ko.observableArray<string>();
         public user = ko.observable<string>();
         public lotterUsers = ko.observableArray<LotterUserViewModel>();
         public randomNum = ko.observable<number>();
+        public doc = ko.observable<string>("");
+        public body = ko.observable<string>();
+        public isSendEmail = ko.observable<boolean>(false);
         public time: number;
         constructor() {
             ko.applyBindings(this);
@@ -19,7 +23,6 @@ module StarLightInternal {
             this.userList.push("Zuo");
             this.userList.push("Hao");
             this.userList.push("jason");
-            this.userList.push("Speed");
             this.userList.push("Ken");
             this.userList.push("junzhuo");
             this.lotterUsers.push(new LotterUserViewModel("星期一"));
@@ -28,6 +31,7 @@ module StarLightInternal {
             this.lotterUsers.push(new LotterUserViewModel("星期四"));
             this.lotterUsers.push(new LotterUserViewModel("星期五"));
         }
+
         public Lotter() {
             var self = this;
             self.userList.remove(self.user());
@@ -38,19 +42,24 @@ module StarLightInternal {
                 var updateCodeUser = lotterUser.updateCodeUser;
                 if (codeReviewUser() == null || codeReviewUser() == "") {
                     codeReviewUser(this.user());
+                    self.doc(self.doc() + lotterUser.week + " code review : " + this.user());
                     return;
                 }
                 if (updateCodeUser() == null || updateCodeUser() == "") {
                     updateCodeUser(this.user());
+                    self.doc(self.doc() + "," + " update Code : " + this.user() + "</br>");
                     if (i == lottersLength - 1) {
                         clearInterval(self.time);
+                        self.isSendEmail(true);
+                        var emailAddress = "gray.wen@starlight-sms.com , yunlong.lan@starlight-sms.com , jianluo.tian@starlight-sms.com , peach.tang@starlight-sms.com , robot.luo@starlight-sms.com , zhun.li@starlight-sms.com , zuo.li@starlight-sms.com , hao.li@starlight-sms.com , jason.wang@starlight-sms.com , ken.xu@starlight-sms.com , junzhuo.zhou@starlight-sms.com";
+                        this.body("mailto:" + emailAddress + "?Subject=code_review&Body=" + this.doc());
                         self.user("抽奖结束");
                     }
                     return;
                 }
             }
-
         };
+
         public EnterLotter() {
             var self = this;
             window.document.onkeyup = function (e) {
@@ -81,6 +90,7 @@ module StarLightInternal {
         }
         public week: string;
         public codeReviewUser = ko.observable<string>();
+        public emailAddress = ko.observable<string>();
         public updateCodeUser = ko.observable<string>();
     }
 }
