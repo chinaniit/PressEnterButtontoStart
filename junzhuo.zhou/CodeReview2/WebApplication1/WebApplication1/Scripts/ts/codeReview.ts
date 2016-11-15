@@ -8,23 +8,21 @@ module StarLightInternal {
         public lotterUsers = ko.observableArray<LotterUserViewModel>();
         public randomNum = ko.observable<number>();
         public doc = ko.observable<string>("");
-        public body = ko.observable<string>();
+        public hrefBody = ko.observable<string>();
         public isSendEmail = ko.observable<boolean>(false);
         public time: number;
+        public emailAddress = ko.observableArray<string>();
         constructor() {
             ko.applyBindings(this);
-            this.userList.push("ZhiDa");
-            this.userList.push("gray");
-            this.userList.push("yunlong");
-            this.userList.push("jianluo");
-            this.userList.push("peach");
-            this.userList.push("robot");
-            this.userList.push("Zhun");
-            this.userList.push("Zuo");
-            this.userList.push("Hao");
-            this.userList.push("jason");
-            this.userList.push("Ken");
-            this.userList.push("junzhuo");
+            var self = this;
+            $.get("/Users.json", function (data) {
+                $.each(data, function (index, item) {
+                    var email = item["email"];
+                    var name = email.split("@test.com");
+                    self.userList.push(name[0]);
+                    self.emailAddress().push(email);
+                })
+            });
             this.lotterUsers.push(new LotterUserViewModel("星期一"));
             this.lotterUsers.push(new LotterUserViewModel("星期二"));
             this.lotterUsers.push(new LotterUserViewModel("星期三"));
@@ -51,8 +49,7 @@ module StarLightInternal {
                     if (i == lottersLength - 1) {
                         clearInterval(self.time);
                         self.isSendEmail(true);
-                        var emailAddress = "gray.wen@starlight-sms.com , yunlong.lan@starlight-sms.com , jianluo.tian@starlight-sms.com , peach.tang@starlight-sms.com , robot.luo@starlight-sms.com , zhun.li@starlight-sms.com , zuo.li@starlight-sms.com , hao.li@starlight-sms.com , jason.wang@starlight-sms.com , ken.xu@starlight-sms.com , junzhuo.zhou@starlight-sms.com";
-                        this.body("mailto:" + emailAddress + "?Subject=code_review&Body=" + this.doc());
+                        this.hrefBody("mailto:" + self.emailAddress() + "?Subject=code_review&Body=" + this.doc());
                         self.user("抽奖结束");
                     }
                     return;
