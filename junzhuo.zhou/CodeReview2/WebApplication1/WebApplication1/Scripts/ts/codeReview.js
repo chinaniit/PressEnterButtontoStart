@@ -17,7 +17,7 @@ var StarLightInternal;
             $.get("/Users.json", function (data) {
                 $.each(data, function (index, item) {
                     var email = item["email"];
-                    var name = email.split("@test.com");
+                    var name = email.split("@starlight-sms.com");
                     self.userList.push(name[0]);
                     self.emailAddress().push(email);
                 });
@@ -30,7 +30,6 @@ var StarLightInternal;
         }
         CodeReview.prototype.Lotter = function () {
             var self = this;
-            self.userList.remove(self.user());
             var lottersLength = self.lotterUsers().length;
             for (var i = 0; i < lottersLength; i++) {
                 var lotterUser = this.lotterUsers()[i];
@@ -42,6 +41,10 @@ var StarLightInternal;
                     return;
                 }
                 if (updateCodeUser() == null || updateCodeUser() == "") {
+                    if (codeReviewUser() == this.user()) {
+                        self.Rotate();
+                        return;
+                    }
                     updateCodeUser(this.user());
                     self.doc(self.doc() + "," + " update Code : " + this.user() + "</br>");
                     if (i == lottersLength - 1) {
@@ -92,3 +95,4 @@ var StarLightInternal;
     }());
     StarLightInternal.LotterUserViewModel = LotterUserViewModel;
 })(StarLightInternal || (StarLightInternal = {}));
+//# sourceMappingURL=codeReview.js.map
