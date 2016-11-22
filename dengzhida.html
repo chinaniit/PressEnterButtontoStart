@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body ng-app="cj">
+    <script src="angular.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+    <script type="text/javascript">
+        angular.module('cj', []).controller('CJController', function ($scope) {
+       $scope.name = [];
+       $scope.user = [
+                    "ZhiDa",
+                    "gray",
+                    "jianluo",
+                    "peach",
+                    "robot",
+                    "Zhun",
+                    "Zuo",
+                    "Hao",
+                    "jason",
+                    "Speed",
+                    "Ken"
+       ];
+        //取不重复的一组name
+       function getArrayItems(arr, num) {
+           var temp_array = new Array();
+           for (var index in arr) {
+               temp_array.push(arr[index]);
+           }
+           var return_array = new Array();
+           for (var i = 0; i < num; i++) {
+               if (temp_array.length > 0) {
+                   var arrIndex = Math.floor(Math.random() * temp_array.length);
+                   return_array[i] = temp_array[arrIndex];
+                   temp_array.splice(arrIndex, 1);
+               } else {
+                   break;
+               }
+           }
+           return return_array;
+       }
+       $scope.start = function () {
+           $scope.$apply(function () {
+               var arry = getArrayItems($scope.user, 2);
+               $scope.user.$remove(arry[0]);//删除已经抽过的name
+               $scope.user.$remove(arry[1]);
+               $scope.name.push(arry);
+           });
+          
+      }
+      window.document.onkeyup = function (e) {
+          if (e.keyCode == 13/*enter*/) {
+              if ($scope.name.length <5) {
+                  $scope.start();
+              }
+             
+          }
+      }
+  });
+    </script>
+   
+    <div ng-controller="CJController">   
+        <h1 style="text-align: center;margin: 0 auto;margin-top: 50px"> 按Enter键抽取</h1>
+        <table style="width: 400px; height: 100px;text-align: center;margin: 0 auto;margin-top: 100px" >
+            <tr style="border:1px solid #0094ff">
+                <td>
+                  时间
+                </td>
+                <td>
+                  检查
+                </td>
+                <td>
+                  修改
+                </td>
+            </tr>
+            <tr  ng-repeat="item in name" >
+                <td>
+                 {{'星期'+($index+1)}}
+                </td>
+                <td >
+              {{item[0]}}
+                </td>
+                <td >
+                {{item[1]}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
