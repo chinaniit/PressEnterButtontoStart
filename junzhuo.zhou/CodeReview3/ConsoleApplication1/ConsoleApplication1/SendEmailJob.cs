@@ -11,13 +11,12 @@ namespace ConsoleApplication1
 {
     public class SendEmailJob : JobBase
     {
-        protected override void ExecuteJob(IJobExecutionContext context)
+        public void SendEmail()
         {
-
-            ReadWriteData read = new ConsoleApplication1.ReadWriteData();
-            var user = read.GetUser();
             try
             {
+                ReadWriteData read = new ConsoleApplication1.ReadWriteData();
+                var user = read.GetUser();
                 string senderServerIp = ConfigurationSettings.AppSettings["Host"].ToString();
                 string fromMailAddress = ConfigurationSettings.AppSettings["User"].ToString();
                 string subjectInfo = "";
@@ -34,6 +33,10 @@ namespace ConsoleApplication1
             {
                 Console.WriteLine(ex);
             }
+        }
+        protected override void ExecuteJob(IJobExecutionContext context)
+        {
+            SendEmail();
         }
 
         public override void Register(IScheduler scheduler)

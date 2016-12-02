@@ -16,6 +16,8 @@ namespace ConsoleApplication1
         {
             RandomCodeReviewManager manager = new RandomCodeReviewManager();
             manager.WriteData();
+            SendEmailJob sendEmail = new SendEmailJob();
+            sendEmail.SendEmail();
         }
         public override void Register(IScheduler scheduler)
         {
