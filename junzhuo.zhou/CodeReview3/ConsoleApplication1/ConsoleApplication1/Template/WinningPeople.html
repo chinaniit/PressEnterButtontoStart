@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div style="align-content">
+        {{Title}}
+    </div>
+    <table align="center" border="1" cellpadding="0" cellspacing="0">
+        <thead style="padding:0px">
+            <tr>
+                <th>Department</th>
+                <th>ReviewDate</th>
+                <th>CodeReview</th>
+                <th>UpdateCode</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#Data}}
+            <tr>
+                <td><span>{{Department}}</span></td>
+                <td><span>{{ReviewDate}}</span></td>
+                <td><span>{{CodeReviewName}}</span></td>
+                <td><span>{{UpdateCodeName}}</span></td>
+            </tr>
+            {{/Data}}
+        </tbody>
+    </table>
+</body>
+</html>
