@@ -14,10 +14,17 @@ namespace ConsoleApplication1
     {
         protected override void ExecuteJob(IJobExecutionContext context)
         {
-            RandomCodeReviewManager manager = new RandomCodeReviewManager();
-            manager.WriteData();
-            SendEmailJob sendEmail = new SendEmailJob();
-            sendEmail.SendEmail();
+            try
+            {
+                RandomCodeReviewManager manager = new RandomCodeReviewManager();
+                manager.WriteData();
+                SendEmailJob sendEmail = new SendEmailJob();
+                sendEmail.SendEmail();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
         public override void Register(IScheduler scheduler)
         {
@@ -34,7 +41,7 @@ namespace ConsoleApplication1
             else
             {
                 trigger = (ICronTrigger)TriggerBuilder.Create()
-                     .WithCronSchedule(ConfigurationSettings.AppSettings["RandomCodeReviewJob"])
+                     .WithCronSchedule(ConfigManager.GetConfig().RandomCodeReviewJob)
                      .Build();
             }
             scheduler.ScheduleJob(job, trigger);

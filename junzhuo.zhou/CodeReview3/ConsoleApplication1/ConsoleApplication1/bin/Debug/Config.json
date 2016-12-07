@@ -1,0 +1,10 @@
+﻿{
+  "Host": "smtp.exmail.qq.com",
+  "User": "junzhuo.zhou@starlight-sms.com",
+  "Pwd": "zhuozhuo19960512",
+  "Port": "25",
+  "SendEmailJob": "40 14 17 ? * *",
+  "RandomCodeReviewJob": "0 14 17 ? * *",
+  "IsTest": "true",
+  "TestEmail": "750907624@qq.com"
+}

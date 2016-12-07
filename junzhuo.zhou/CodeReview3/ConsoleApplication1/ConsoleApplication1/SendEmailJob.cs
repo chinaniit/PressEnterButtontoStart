@@ -11,22 +11,27 @@ namespace ConsoleApplication1
 {
     public class SendEmailJob : JobBase
     {
+        SysManager _manager = new SysManager();
         public void SendEmail()
         {
+            if ((int)DateTime.Now.DayOfWeek > 5)
+            {
+                return;
+            }
             try
             {
+                var users = _manager.GetOneUser();
+                string senderServerIp = ConfigManager.GetConfig().EmailHost;
+                string fromMailAddress = ConfigManager.GetConfig().EmailUser;
                 ReadWriteData read = new ConsoleApplication1.ReadWriteData();
-                var user = read.GetUser();
-                string senderServerIp = ConfigurationSettings.AppSettings["Host"].ToString();
-                string fromMailAddress = ConfigurationSettings.AppSettings["User"].ToString();
-                string subjectInfo = "";
-                var emailData = read.GetEmailData();
+                var winningPeoples = _manager.GetWinningPeoples();
+                var subject = "抽奖日期：" + winningPeoples.FirstOrDefault().ReviewDate;
                 string bodyInfo = read.GetWinningPeopleStrByHtml("ConsoleApplication1.Template.WinningPeople.html",
-                    new { Data = emailData.List, Title = emailData.Title });
-                string mailUsername = ConfigurationSettings.AppSettings["User"].ToString();
-                string mailPassword = ConfigurationSettings.AppSettings["Pwd"].ToString(); //发送邮箱的密码（）
-                string mailPort = ConfigurationSettings.AppSettings["Port"].ToString();
-                MyEmail email = new MyEmail(senderServerIp, user.Select(p => p.Email), fromMailAddress, subjectInfo, bodyInfo, mailUsername, mailPassword, mailPort, false, false);
+                    new { Data = winningPeoples, Title = subject });
+                string mailUsername = ConfigManager.GetConfig().EmailUser;
+                string mailPassword = ConfigManager.GetConfig().EmailPwd;
+                string mailPort = ConfigManager.GetConfig().EmailPort;
+                MyEmail email = new MyEmail(senderServerIp, users.Select(p => p.Email), fromMailAddress, subject, bodyInfo, mailUsername, mailPassword, mailPort, false, false);
                 email.Send();
             }
             catch (Exception ex)
@@ -41,7 +46,7 @@ namespace ConsoleApplication1
 
         public override void Register(IScheduler scheduler)
         {
-            bool isTest = Convert.ToBoolean(ConfigurationSettings.AppSettings["IsTest"]);
+            bool isTest = Convert.ToBoolean(ConfigManager.GetConfig().IsTest);
             IJobDetail job = JobBuilder.Create(this.GetType())
                 .Build();
             ITrigger trigger;
@@ -54,7 +59,7 @@ namespace ConsoleApplication1
             else
             {
                 trigger = (ICronTrigger)TriggerBuilder.Create()
-                     .WithCronSchedule(ConfigurationSettings.AppSettings["SendEmailJob"])
+                     .WithCronSchedule(ConfigManager.GetConfig().SendEmailJob)
                      .Build();
             }
 

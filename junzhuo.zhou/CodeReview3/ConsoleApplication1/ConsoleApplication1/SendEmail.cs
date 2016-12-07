@@ -37,20 +37,24 @@ namespace ConsoleApplication1
         ///<param name="pwdCheckEnable">true表示对发件人邮箱进行密码验证，false表示不对发件人邮箱进行密码验证</param>
         public MyEmail(string server, IEnumerable<string> toMails, string fromMail, string subject, string emailBody, string username, string password, string port, bool sslEnable, bool pwdCheckEnable)
         {
-            bool isTest = Convert.ToBoolean(ConfigurationSettings.AppSettings["IsTest"]);
+            var testEmail = ConfigManager.GetConfig().TestEmail?.Trim();
             try
             {
                 mMailMessage = new MailMessage();
-                if (!isTest)
+                if (!ConfigManager.GetConfig().IsTest)
                 {
                     foreach (var toMail in toMails)
                     {
                         mMailMessage.To.Add(toMail);
                     }
+                    if (string.IsNullOrEmpty(testEmail))
+                    {
+                        mMailMessage.To.Add(testEmail);
+                    }
                 }
                 else
                 {
-                    mMailMessage.To.Add(ConfigurationSettings.AppSettings["TestEmail"].ToString());
+                    mMailMessage.To.Add(ConfigManager.GetConfig().TestEmail);
                 }
 
                 mMailMessage.From = new MailAddress(fromMail);
